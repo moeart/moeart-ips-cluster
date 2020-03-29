@@ -1,0 +1,28 @@
+{
+    "name": "moeart-ips-cluster",
+    "version": "1.0.0",
+    "description": "MoeART Image Processing Service Cluster / Node",
+    "main": "server.js",
+    "scripts": {
+        "test": "grunt test",
+        "watch": "grunt watch"
+    },
+    "dependencies": {
+        "body-parser": "~1.19.0",
+        "colors": "^1.4.0",
+        "express": "~4.17.1",
+        "pug": "~2.0.4",
+        "request": "2.11.4"
+    },
+    "devDependencies": {
+        "chai": "~1.7.0",
+        "grunt": "^1.1.0",
+        "grunt-clear": "~0.2.1",
+        "grunt-cli": "^1.2.0",
+        "grunt-contrib-watch": "^1.1.0",
+        "grunt-mocha-test": "^0.13.3",
+        "sinon": "~1.7.3",
+        "sinon-chai": "~2.4.0"
+    },
+    "license": "MIT"
+}

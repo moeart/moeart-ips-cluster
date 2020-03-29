@@ -1,0 +1,133 @@
+html(lang='zh')
+  head
+    meta(charset='utf-8')
+    title 萌绘图像处理集群
+    style(type='text/css', media='screen').
+      body {
+        margin: 50px;
+        font: 15px/1.5em Helvetica, Arial, sans-serif;
+      }
+      #wrapper {
+        width: 75%;
+      }
+      code {
+        font-size: 13px;
+        background: #F8F8F8;
+        border: 1px solid #EAEAEA;
+        padding: 1px;
+        display: inline-block;
+        margin: 5px 2px;
+        padding: 2px 6px;
+        color: red;
+        line-height: 1em;
+      }
+      h2 {
+        border-bottom: 1px solid #CCCCCC;
+        padding-bottom: 0.2em;
+      }
+  body#index.home
+    #wrapper
+      h1 萌绘图像处理 - #{modename}
+      p
+        | 调用方法： http://#{hostname}/
+        code resize
+        | /
+        code output
+        | /
+        code url
+      h2 选项参数
+      p
+        strong
+          code resize
+      ul
+        li
+          | 适应边长缩放到目标尺寸&nbsp;
+          code width
+          | x
+          code height
+        li
+          | 指定方位裁剪到目标尺寸&nbsp;
+          | c
+          code width
+          | x
+          code height
+          | [
+          code gravity
+          | ] 
+          br
+          | 默认
+          code gravity
+          | 为
+          code c
+          | 中央
+          br
+          | 可选方位包含
+          code c
+          | ,
+          code n
+          | ,
+          code ne
+          | ,
+          code e
+          | ,
+          code se
+          | ,
+          code s
+          | ,
+          code sw
+          | ,
+          code w
+          | ,
+          code nw
+        li
+          | 缩放至指定高度&nbsp;
+          | h
+          code height
+          | , h160
+        li
+          | 缩放至指定宽度&nbsp;
+          | w
+          code width
+          | , w120
+      p
+        strong
+          code output
+      ul
+        li
+          code format
+          br
+          | 默认
+          code format
+          | 为
+          code jpg
+          | 可选格式包含
+          code jpg
+          | 与
+          code png
+        li
+          code jpg
+          | ,
+          code quality
+          br
+          | 为
+          code jpg
+          | 格式设置质量 (默认 80，可选项)
+      p
+        strong
+          code url
+      ul
+        li 待处理图片 URL 地址
+      h2 参考样例
+      p
+        code http://#{hostname}/120x160/jpg/http://domain.com/image.jpg
+        br
+        code http://#{hostname}/c300x300/jpg/http://domain.com/image.jpg
+        br
+        code http://#{hostname}/c300x300n/jpg/http://domain.com/image.jpg
+        br
+        code http://#{hostname}/h300/jpg/http://domain.com/image.jpg
+        br
+        code http://#{hostname}/w300/jpg,100/http://domain.com/image.jpg
+
+    a(href='https://github.com/tbasse/resize-server', target='_blank')
+      img(style='position: absolute; top: 0; right: 0; border: 0;', src='https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67', alt="Fork me on GitHub", data-canonical-src='https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png')

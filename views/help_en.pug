@@ -1,0 +1,130 @@
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    title MoeART Image Processing Service
+    style(type='text/css', media='screen').
+      body {
+        margin: 50px;
+        font: 15px/1.5em Helvetica, Arial, sans-serif;
+      }
+      #wrapper {
+        width: 75%;
+      }
+      code {
+        font-size: 13px;
+        background: #F8F8F8;
+        border: 1px solid #EAEAEA;
+        padding: 1px;
+        display: inline-block;
+        margin: 5px 2px;
+        padding: 2px 6px;
+        color: red;
+        line-height: 1em;
+      }
+      h2 {
+        border-bottom: 1px solid #CCCCCC;
+        padding-bottom: 0.2em;
+      }
+  body#index.home
+    #wrapper
+      h1 MoeART Image Processing Service
+      p
+        | usage: http://#{hostname}/
+        code resize
+        | /
+        code output
+        | /
+        code url
+      h2#options Options
+      p
+        strong
+          code resize
+      ul
+        li
+          code width
+          | x
+          code height
+          | stretch to dimensions
+        li
+          | c
+          code width
+          | x
+          code height
+          | [
+          code gravity
+          | ] crop to dimensions with optional gravity
+          br
+          | Default
+          code gravity
+          | is
+          code c
+          | for center
+          br
+          | Choices include
+          code c
+          | ,
+          code n
+          | ,
+          code ne
+          | ,
+          code e
+          | ,
+          code se
+          | ,
+          code s
+          | ,
+          code sw
+          | ,
+          code w
+          | ,
+          code nw
+        li
+          | h
+          code height
+          | , h160: scale proportional to height
+        li
+          | w
+          code width
+          | , w120: scale proportional to width
+      p
+        strong
+          code output
+      ul
+        li
+          code format
+          br
+          | Default
+          code format
+          | is
+          code jpg
+          | Choices include
+          code jgp
+          | and
+          code png
+        li
+          code jpg
+          | ,
+          code quality
+          br
+          | Optional quality setting for
+          code jpg
+          | format (Defaults to 80)
+      p
+        strong
+          code url
+      ul
+        li A valid URL to the source image to be resized
+      h2#examples Examples
+      p
+        code http://#{hostname}/120x160/jpg/http://domain.com/image.jpg
+        br
+        code http://#{hostname}/c300x300/jpg/http://domain.com/image.jpg
+        br
+        code http://#{hostname}/c300x300n/jpg/http://domain.com/image.jpg
+        br
+        code http://#{hostname}/h300/jpg/http://domain.com/image.jpg
+        br
+        code http://#{hostname}/w300/jpg,100/http://domain.com/image.jpg
+
+    a(href='https://github.com/tbasse/resize-server', target='_blank')
+      img(style='position: absolute; top: 0; right: 0; border: 0;', src='https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67', alt="Fork me on GitHub", data-canonical-src='https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png')
