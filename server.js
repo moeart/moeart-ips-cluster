@@ -4,6 +4,7 @@ var express         = require('express');
 var bodyParser      = require('body-parser');
 var fs              = require('fs');
 var got             = require('got');
+var path            = require('path');
 
 var log             = require('./lib/log');
 var RequestSplitter = require('./lib/requestsplitter');
@@ -125,7 +126,35 @@ app.get(RequestSplitter.urlMatch, function (req, res) {
          * Work Standalone
          */
         case "node":
+            var returned = false;
+            var processed = false;
+
+            // wait and return inprogress image
+            var startTimer = new Date().getTime();
+            var inprogress = setInterval(() => {
+                // image has been processed
+                if (processed === true) {
+                    return ;
+                }
+                var usedTime = new Date().getTime() - startTimer;
+                if (usedTime > config.inprogressWait * 1000) {
+                    clearInterval(inprogress);
+                    res.header('Access-Control-Allow-Origin', "*");
+                    res.header('Access-Control-Allow-Methods', "GET, POST, HEAD, OPTIONS");
+                    res.sendFile(__dirname + config.inprogressImage;
+                    returned = true;
+                }
+            }, 100);
+
             new ResizePlugin.Local(rs, function(o) {
+                // breaked by "inprogress"
+                if (returned === true) {
+                    return ;
+                }
+
+                // tell "inprogress" processed
+                processed = true;
+
                 // check resize status
                 // 1: success, 0: failed
                 switch (o.status) {

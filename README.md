@@ -6,11 +6,13 @@ A node.js based Image-processing server, supports work as standalone or work as 
 
 -  `appPort` the port the server will be listening on
 -  `appStdOut` set to `false` to prevent stdout logging
+-  `workMode` work as IPS `node` or IPS `cluster`
+-  `inprogressWait` when timeout, send "inprogress" to user
+-  `inprogressImage` where is the inprogress image file
 -  `convertCmd` path to imagemagicks `convert`
 -  `cacheDirectory` directory to save converted images to
 -  `cacheHeader` cache-control message in http header
 -  `corsHeader` cross-origin resource sharing header
--  `workMode` work as IPS `node` or IPS `cluster`
 -  `allowedDomains` destination server domain whitelist, leave blank `[]` for disable
 
 ## Cluster Config
