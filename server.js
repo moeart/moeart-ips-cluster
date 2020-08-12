@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 var express         = require('express');
 var bodyParser      = require('body-parser');
@@ -141,7 +141,7 @@ app.get(RequestSplitter.urlMatch, function (req, res) {
                     clearInterval(inprogress);
                     res.header('Access-Control-Allow-Origin', "*");
                     res.header('Access-Control-Allow-Methods', "GET, POST, HEAD, OPTIONS");
-                    res.sendFile(__dirname + config.inprogressImage;
+                    res.sendFile(__dirname + config.inprogressImage);
                     returned = true;
                 }
             }, 100);
