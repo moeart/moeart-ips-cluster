@@ -139,7 +139,14 @@ app.get(RequestSplitter.urlMatch, function (req, res) {
                         break;
 
                     case 0:
-                        res.status(o.code).json(o.message);
+                        try {
+                            res.status(o.code).json(o.message);
+                        } catch (e) {
+                            res.status(500).json({
+                                status: "error",
+                                message: "internal server error"
+                            });
+                        }
                         res.end();
                         break;
                 }
