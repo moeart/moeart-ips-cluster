@@ -4,11 +4,20 @@ A node.js based Image-processing server, supports work as standalone or work as 
 
 ## Config
 
--  `appPort` The port the server will be listening on
--  `appStdOut` Set to `false` to prevent stdout logging
--  `convertCmd` Path to imagemagicks `convert`
--  `cacheDirectory` Directory to save converted images to
+-  `appPort` the port the server will be listening on
+-  `appStdOut` set to `false` to prevent stdout logging
+-  `convertCmd` path to imagemagicks `convert`
+-  `cacheDirectory` directory to save converted images to
+-  `cacheHeader` cache-control message in http header
+-  `corsHeader` cross-origin resource sharing header
 -  `workMode` work as IPS `node` or IPS `cluster`
+-  `allowedDomains` destination server domain whitelist, leave blank `[]` for disable
+
+## Cluster Config
+
+-  `nodes` available IPS node server list
+-  `localNode` url of main node (cluster)
+-  `waitNodeTime` how many seconds wait for node health check
 
 ## Usage
 

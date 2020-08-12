@@ -3,6 +3,7 @@
 var express         = require('express');
 var bodyParser      = require('body-parser');
 var fs              = require('fs');
+var got             = require('got');
 
 var log             = require('./lib/log');
 var RequestSplitter = require('./lib/requestsplitter');
@@ -42,7 +43,12 @@ app.get('/health', function (req, res) {
  * Print Help Page
  */
 app.get('/', function (req, res) {
-    var isChinese = req.header('Accept-Language').includes('zh');
+    try {
+        var isChinese = req.header('Accept-Language').includes('zh');
+    } catch (error) {
+        var isChinese = false;
+    }
+
     switch (config.workMode) {
         case "node":
             var modename = isChinese ? "节点" : "Node";
@@ -75,10 +81,45 @@ app.get('/', function (req, res) {
  * Image Process
  */
 app.get(RequestSplitter.urlMatch, function (req, res) {
-    
-    var rs = new RequestSplitter(req.path, req.query);
 
-    switch (config.workMode) {
+    // force local node
+    // if "/local-ips-node" is set
+    var rs = null
+    var workMode = config.workMode;
+    if (req.path.indexOf('/moeart-ips-node') === 0) {
+        rs = new RequestSplitter(req.path.replace('/moeart-ips-node', ''), req.query);
+        workMode = "node";
+    } else {
+        rs = new RequestSplitter(req.path, req.query);
+    }
+
+
+    // check domain in while list
+    if (config.allowedDomains.length > 0) {
+        var destDomain = rs.mapOptions()
+            .imagefile
+            .replace(/^\w+:\/\//, '')
+            .split('/')[0];
+
+        var isDomainAllowed = false;
+        config.allowedDomains.forEach((v) => {
+            if (destDomain.match(v)) {
+                isDomainAllowed = true;
+            }
+        });
+        if (!isDomainAllowed) {
+            res.status(403).json({
+                status: 403,
+                reason: "Destination domain is NOT allowed!"
+            });
+            res.end();
+            log.write(`destination domain [${destDomain}] is not allowed!`, "error");
+            return;
+        }
+    }
+
+
+    switch (workMode) {
         /** 
          * NODE MODE
          * Work Standalone
@@ -92,7 +133,9 @@ app.get(RequestSplitter.urlMatch, function (req, res) {
                         var now = new Date().getTime();
                         res.header('X-ResizeJobDuration', o.duration);
                         res.header('Expires', new Date(now + config.cacheHeader.expires));
-                        res.sendfile(o.file, { maxAge: config.cacheHeader.maxAge });
+                        res.header('Access-Control-Allow-Origin', config.corsHeader.origin);
+                        res.header('Access-Control-Allow-Methods', config.corsHeader.method);
+                        res.sendFile(o.file, { maxAge: config.cacheHeader.maxAge });
                         break;
 
                     case 0:
@@ -108,18 +151,48 @@ app.get(RequestSplitter.urlMatch, function (req, res) {
          * Distributed Resource Scheduler
          */
         case "cluster":
-            //..TODO..
-            // Ping all nodes in `cluster.js` defined as `cluster`
-            // send task to fast responed host
-            // store file come from node to cache
-            // and send file to client
-            //
-            // the url format is same between node and cluster
-            // so just send original url `req.path+req.query` to node
-            // and download file from node save to cache
-            // and send to client
+            var preferredNode = null;
+
+            // do node health test
+            cluster.nodes.forEach((node) => {
+                (async () => {
+                    try {
+                        const response = await got(node + '/health');
+                        if (response.statusCode === 200) {
+                            log.write(`node [${node}] responsed at ${response.body}ms`, "info");
+                            if (preferredNode === null) {
+                                preferredNode = node;
+                            }
+                        }
+                        else {
+                            log.write(`node [${node}] health test failed!`, "error");
+                        }
+                    } catch (error) {
+                        log.write(`node [${node}] health test failed!`, "error");
+                    }
+                })();
+            });
+            
+            // return 302 to preferred node url
+            var waitTime = Date.now() + (cluster.waitNodeTime * 1000);
+            var waitHealthTest = setInterval(() => {
+                if (preferredNode !== null || Date.now > waitTime)
+                {
+                    clearInterval(waitHealthTest);
+                    if (preferredNode === null) {
+                        preferredNode =  cluster.localNode;
+                    }
+                    log.write(`preferred node is [${preferredNode}]`, "info");
+
+                    res.writeHead(302, {
+                        'Location': `${preferredNode}/moeart-ips-node${req.path}${rs.buildQueryString()}`
+                    });
+                    res.end();
+                }
+            }, 100);
+            
             break;
-        
+
         /**
          * UNSUPPORTS MODE
          */
