@@ -176,7 +176,7 @@ app.get(RequestSplitter.urlMatch, function (req, res) {
             // return 302 to preferred node url
             var waitTime = Date.now() + (cluster.waitNodeTime * 1000);
             var waitHealthTest = setInterval(() => {
-                if (preferredNode !== null || Date.now > waitTime)
+                if (preferredNode !== null || Date.now() > waitTime)
                 {
                     clearInterval(waitHealthTest);
                     if (preferredNode === null) {
