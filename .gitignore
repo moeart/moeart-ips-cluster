@@ -2,3 +2,5 @@
 node_modules/*
 cache/*
 tmp/*
+/cluster.js
+/config.js
