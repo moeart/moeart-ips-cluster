@@ -17,7 +17,7 @@ var config = {
     },
 
     corsHeader: {                   // CORS 跨域头部配置
-        origin: "http://www.acgdraw.com",
+        origin: "https://www.acgdraw.com",
         method: "GET"
     },
 
